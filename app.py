@@ -12,6 +12,9 @@ import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
+
+from flask_migrate import Migrate
+
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -20,6 +23,8 @@ app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 
 # TODO: connect to a local postgresql database
 
@@ -510,8 +515,13 @@ if not app.debug:
 # Launch.
 #----------------------------------------------------------------------------#
 
+import config
+print("Database uri is: {}".format(app.config['SQLALCHEMY_DATABASE_URI']))
+print("Base dir lowercase is: {}".format(config.basedir))
+
 # Default port:
 if __name__ == '__main__':
+    print("Running the app via app.run()")
     app.run()
 
 # Or specify port manually:

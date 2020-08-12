@@ -8,6 +8,9 @@ DEBUG = True
 
 # Connect to the database
 
-
 # TODO IMPLEMENT DATABASE URL
-SQLALCHEMY_DATABASE_URI = '<Put your local database url>'
+
+# N.B. A user password is required, otherwise, you get a runtime exception
+db_url = "postgres+psycopg2://earl:passwd@localhost:5432/fyyur"
+SQLALCHEMY_DATABASE_URI = db_url
+SQLALCHEMY_TRACK_MODIFICATIONS = False
