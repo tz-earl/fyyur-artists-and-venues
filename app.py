@@ -51,6 +51,10 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
 
+    website = db.Column(db.String(120), default="", nullable=False)
+    seeking_talent = db.Column(db.Boolean, default=False, nullable=False)
+    seeking_description = db.Column(db.String(200), default="", nullable=False)
+
     genres = db.relationship(
         "Genre",
         secondary=venue_genre_table,
