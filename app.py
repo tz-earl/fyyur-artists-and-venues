@@ -51,9 +51,9 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
 
-    website = db.Column(db.String(120), default="", nullable=False)
-    seeking_talent = db.Column(db.Boolean, default=False, nullable=False)
-    seeking_description = db.Column(db.String(200), default="", nullable=False)
+    website = db.Column(db.String(120), default="")
+    seeking_talent = db.Column(db.Boolean, default=False)
+    seeking_description = db.Column(db.String(200), default="")
 
     genres = db.relationship(
         "Genre",
@@ -241,6 +241,9 @@ def show_venue(venue_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 1,
   }
+
+#  this_venue = Venue.query.get(venue_id)
+
   data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
   return render_template('pages/show_venue.html', venue=data)
 
