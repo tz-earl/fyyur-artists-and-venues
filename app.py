@@ -32,6 +32,13 @@ migrate = Migrate(app, db)
 # Models.
 #----------------------------------------------------------------------------#
 
+# The following SQLAlchemy pattern is used when a join table
+venue_genre_table = db.Table('venue_genre', db.Model.metadata,
+    db.Column('venue_id', db.Integer, db.ForeignKey('Venue.id'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('Genre.id'), primary_key=True)
+    )
+
+
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
@@ -43,6 +50,24 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+
+    genres = db.relationship(
+        "Genre",
+        secondary=venue_genre_table,
+        back_populates="venues")
+
+
+class Genre(db.Model):
+    __tablename__ = 'Genre'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), db.CheckConstraint(" <> '' "), nullable=False)
+
+    venues = db.relationship(
+        "Venue",
+        secondary=venue_genre_table,
+        back_populates="genres")
+
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -60,11 +85,6 @@ class Artist(db.Model):
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
-class Genre(db.Model):
-    __tablename__ = 'Genre'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), db.CheckConstraint(" <> '' "), nullable=False)
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
