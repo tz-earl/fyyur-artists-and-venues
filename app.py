@@ -32,7 +32,10 @@ migrate = Migrate(app, db)
 # Models.
 #----------------------------------------------------------------------------#
 
-# The following SQLAlchemy pattern is used when a join table
+# The following SQLAlchemy pattern can be used when a join table, aka
+# association table, is needed. Note that this is in lieu of declaring a
+# class that is sublcassed from db.Model. This is a good pattern to use
+# if there are no other columns besides the two foreign keys.
 venue_genre_table = db.Table('venue_genre', db.Model.metadata,
     db.Column('venue_id', db.Integer, db.ForeignKey('Venue.id'), primary_key=True),
     db.Column('genre_id', db.Integer, db.ForeignKey('Genre.id'), primary_key=True)
@@ -157,8 +160,16 @@ def search_venues():
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
   # DONE: replace with real venue data from the venues table, using venue_id
+  # TODO: retrieve upcoming shows and past shows
   this_venue = Venue.query.get(venue_id)
-  return render_template('pages/show_venue.html', venue=this_venue)
+  ven = {'name': this_venue.name, 'id': this_venue.id, 'genres': [genr.name for genr in this_venue.genres],
+          'city': this_venue.city, 'address': this_venue.address, 'phone': this_venue.phone,
+          'website': this_venue.website, 'facebook_link': this_venue.facebook_link,
+          'seeking_talent': this_venue.seeking_talent, 'seeking_description': this_venue.seeking_talent,
+          'upcoming_shows_count': 0, 'upcoming_shows': [],
+          'past_shows_count': 0, 'past_shows': []
+        }
+  return render_template('pages/show_venue.html', venue=ven)
 
 #  Create Venue
 #  ----------------------------------------------------------------
